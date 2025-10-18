@@ -1,0 +1,41 @@
+name: Notebook smoke-test
+
+on:
+  push:
+    paths:
+      - 'computer_infrastructure_assessment/yfinance.ipynb'
+      - 'requirements.txt'
+  pull_request:
+    paths:
+      - 'computer_infrastructure_assessment/yfinance.ipynb'
+      - 'requirements.txt'
+
+jobs:
+  smoke-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      - name: Run smoke test
+        run: |
+          python - <<'PY'
+          import importlib
+          modules = ['yfinance','numpy','pandas']
+          ok = True
+          for m in modules:
+              try:
+                  mod = importlib.import_module(m)
+                  print(m, 'version=', getattr(mod,'__version__','unknown'))
+              except Exception as e:
+                  print('Failed to import', m, e)
+                  ok = False
+          if not ok:
+              raise SystemExit('Smoke test failed: missing imports')
+          PY
