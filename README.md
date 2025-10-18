@@ -2,10 +2,6 @@
 
 ## Setup
 
-# computer_infrastructure_assessment
-
-## Setup
-
 Follow these steps to install the packages listed in `requirements.txt`.
 
 1. Upgrade pip and install dependencies:
