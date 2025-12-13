@@ -1,1 +1,0 @@
-# computer_infrastructure_assessment
